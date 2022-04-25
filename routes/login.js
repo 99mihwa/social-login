@@ -3,10 +3,13 @@ const User = require("../schemas/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const authMiddleWare = require("../middleware/authMiddleWare");
-// const{ KEY } = process.env.KEY;
+//const{ KEY } = process.env.KEY;
 const dotenv = require("dotenv").config();
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+res.sendFile(__dirname + "/login.html");
+})
 
 // login page
 router.post("/login", async (req, res) => {
@@ -30,6 +33,7 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({ userId : user.userId }, `${process.env.KEY}`);
     // console.log('webtoken-->',token)
     res.status(200).send({
+        "result":"success",
         token,
         userId,
     });
