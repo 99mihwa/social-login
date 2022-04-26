@@ -5,7 +5,19 @@
         <title>Video Chat Application</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
         <link href="/styles.css" rel="stylesheet" />
+
+		<script>
+			$('#select-room-button').click(() => {
+				let roomName = $('#select-room').val();
+				if(roomName === "none") 
+					return alert("방을 선택해주세요.");
+				socket.emit('req_join_room', roomName);
+			});
+			</script>
+
     </head>
+	
+   
     <body>
 
         <div id="video-chat-lobby">
@@ -20,6 +32,38 @@
             <video id="user-video"></video>
             <video id="peer-video"></video>
         </div>
+<!-- 방선택 -->
+<div class="col-lg-8">
+	<div class="card">
+		<div class="card-header">
+			방선택
+		</div>
+		<div class="card-body">
+			<div class="input-group mb-1">
+                <select id="select-room" class="form-control">
+					<option value="none" selected="selected">방을 선택해주세요</option>
+                    <!-- 수동으로 만들어진 채팅 방 -->
+					<option value="test-room">테스트 방</option>
+				</select>
+				<div class="input-group-append">
+					<button id="select-room-button" class="btn btn-success" placeholder="message">Select</button>
+				</div>
+			</div>
+			<form action="">
+				<div class="input-group mb-1">
+					<input type="text" class="form-control" id="room-message" autocomplete="off" />
+					<div class="input-group-append">
+						<button id="room-msg-send" class="btn btn-primary" placeholder="message">Send</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="card-footer">
+			<ul id="room-messages"></ul>
+		</div>
+	</div>
+</div>
+
 
     </body>
     <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>

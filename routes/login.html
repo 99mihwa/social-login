@@ -78,27 +78,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script>
 
-        function login() {
-                $.ajax({
-                    type: "POST",
-                    url: "/user/login",
-                    data: {userId: $('#userid').val(), userPw: $('#userpw').val()},
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                           // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
-                            // 이 토큰을 localStorage에 저장합니다.
-                            localStorage.setItem("token", response.token);  
-                            localStorage.setItem("userId", response.userId);          
-                            alert('로그인 완료!')
-                            console.log(response['token'])
+        // function login() {
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "/user/login",
+        //             data: {userId: $('#userid').val(), userPw: $('#userpw').val()},
+        //             success: function (response) {
+        //                 if (response['result'] == 'success') {
+        //                    // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
+        //                     // 이 토큰을 localStorage에 저장합니다.
+        //                     localStorage.setItem("token", response.token);  
+        //                     localStorage.setItem("userId", response.userId);          
+        //                     alert('로그인 완료!')
+        //                     console.log(response['token'])
 
-                        } else {
-                             //로그인이 안되면 에러메시지를 띄웁니다.
-                            alert(response['msg'])
-                        }
-                    }
-                })
-            }
+        //                 } else {
+        //                      //로그인이 안되면 에러메시지를 띄웁니다.
+        //                     alert(response['msg'])
+        //                 }
+        //             }
+        //         })
+        //     }
+
+            //  // 로그인 버튼 클릭 시 처리
+            //  $("#login").bind('click', function(event) {
+            //     userid = $('#userid').val();
+
+            //     var output = {userid:userid};
+            //     console.log('서버로 보낼 데이터 : ' + JSON.stringify(output));
+
+            //     if (socket == undefined) {
+            //         alert('서버에 연결되어 있지 않습니다. 먼저 서버에 연결하세요.');
+            //         return;
+            //     }
+
+            //     socket.emit('login', output);
+            //     socket.emit('me');
+            // });
+
 
     function sign_up() {
             window.location.href='/user'
@@ -108,14 +125,10 @@
 
 </head>
 <body>
-        <div class="basic">
-            <p class="you">hang</p>
-            <p class="are">Hae</p>
-            <p class="my">Log</P>
-        </div>
+        
         <div class="wrap">
             <div class="id">
-                <label for="userid">NICKNAME</label>
+                <label for="userid">ID</label>
                 <input type="text" id="userid">
             </div>
             <div class="pw">
@@ -123,7 +136,7 @@
                 <input type="password" id="userpw">
             </div>
             <div class="mybutton">
-                <div class="fst"><button type="button" class="btn btn-warning" onclick="login()">로그인</button></div>
+                <div class="fst"><button id="login" type="button" class="btn btn-warning" >로그인</button></div>
                 <div class="scd"><button type="button" class="btn btn-warning" onclick="sign_up()">회원가입</button></div>
             </div>
         </div>

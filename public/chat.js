@@ -2,10 +2,11 @@ let socket = io.connect("http://localhost:3000");
 let divVideoChatLobby = document.getElementById("video-chat-lobby");
 let divVideoChat = document.getElementById("video-chat-room");
 let joinButton = document.getElementById("join");
+let userIdButton = document.getElementById("userId");
 let roomInput = document.getElementById("roomName");
 let userVideo = document.getElementById("user-video");
 let peerVideo = document.getElementById("peer-video");
-let roomName;
+let roomName = []
 let creator = false;
 let rtcPeerConnection;
 let userStream;
@@ -23,12 +24,20 @@ let iceServers = {
   ],
 };
 
+loginButton.addEventListener("click", function () {
+  if (userIdInput.value == "" || userPwInput.value == "") {
+    alert("Please enter a Id ans Password");
+  } else {
+    userId = userIdInput.value;
+    socket.emit("login", userId);
+  }
+});
 
 joinButton.addEventListener("click", function () {
   if (roomInput.value == "") {
     alert("Please enter a room name");
   } else {
-    roomName = roomInput.value;
+    roomName.push(socket.id)
     socket.emit("join", roomName);
   }
 });
