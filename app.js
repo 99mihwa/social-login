@@ -89,7 +89,6 @@ let server = app.listen(port, () => {
   
     socket.on("join", function (roomName) {
       console.log("푸쉬한 룸네임은?????",roomName)
-      userId = res.locals.user.userId
       let rooms = io.sockets.adapter.rooms;
       let room = rooms.get(roomName);
   
