@@ -16,6 +16,8 @@ let userIdInput = document.getElementById("userId");
 let userPwInput = document.getElementById("userPw");
 
 
+//ICE(Interactive Connectivity Establishment) -> 프레임워크명, 
+//   2개의 단말이 P2P연결을 가능하게 하도록 최적의 경로를 찾아줌
 // Contains the stun server URL we will be using.
 let iceServers = {
   iceServers: [
@@ -24,6 +26,7 @@ let iceServers = {
   ],
 };
 
+//addEventListener: 지정한 유형의 이벤트를 대상이 수신할 때마다 호출할 함수를 설정
 loginButton.addEventListener("click", function () {
   if (userIdInput.value == "" || userPwInput.value == "") {
     alert("Please enter a Id ans Password");
@@ -32,6 +35,10 @@ loginButton.addEventListener("click", function () {
     socket.emit("login", userId);
   }
 });
+/*로그인 버튼 클릭 시(이벤트 발생) 
+  userIdInput이나 userPwInput이 빈값인 경우 alert를 띄우고
+  아닌 경우 userId와 "login"이벤트 발생을 서버 측으로 전달
+  -> DB의 user값과 대조하여 확인하는 부분 생략되어 보완 필요 */
 
 joinButton.addEventListener("click", function () {
   if (roomInput.value == "") {
@@ -41,13 +48,19 @@ joinButton.addEventListener("click", function () {
     socket.emit("join", roomName);
   }
 });
-
+/*조인 버튼 클릭 시(이벤트 발생) 
+  roomInput이 빈값인 경우 alert를 띄우고
+  아닌 경우 roomName배열에 socket.id push 후
+  roomName과 "join"이벤트 발생을 서버 측으로 전달 */
 
 // Triggered when a room is succesfully created.
 
 socket.on("created", function () {
   creator = true;
 
+/* creator가 참 또는 거짓인 경우는 하단의 socket.on("ready") 와 socket.on("offer")
+과 연결됨(추정)*/
+  
   navigator.mediaDevices
     .getUserMedia({
       audio: true,
@@ -124,6 +137,7 @@ socket.on("ready", function () {
 
 // Triggered on receiving an ice candidate from the peer.
 
+//candidate: 연결 가능한 네크워크 주소의 후보(candidate)
 socket.on("candidate", function (candidate) {
   let icecandidate = new RTCIceCandidate(candidate);
   rtcPeerConnection.addIceCandidate(icecandidate);

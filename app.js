@@ -1,16 +1,10 @@
-// const express = require("express");
-// const app = express();
-// const port = 3000;
-// const connect = require("./schemas/index");
-// connect();
-//   //const Logins = require("./schemas/logins"); //logins DB 연결하기
-// const cors = require("cors");
-// app.use(cors());
+/* 하단의 코드는 동선님이 주신 코드를 기본으로 하되, 
+ chat.js와 구동이 안되는 부분은 동선님 코드 부분을 주석처리하고 
+ 기존 코드로 대체하였습니다 */
+
+//기존코드
  const socket = require("socket.io");
-// const moment = require('moment'); 
-// require('moment-timezone');
-// moment.tz.setDefault("Asia/Seoul");
-// const authMiddleWare = require("./middleware/authMiddleWare");
+
 
 // // 동선님 코드
 const http = require("http");
@@ -37,21 +31,9 @@ const requestMiddleware = (req, res, next) => {
 };
 
 
-
-// router
-// const usersRouter = require("./routes/login");
-// const resisterRouter = require("./routes/register");
-// const kakaoRouter = require('./routes/kakaoLogin');
-
-
-//middleware
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-// app.use('/user', [usersRouter, resisterRouter]);
-// app.use('', [kakaoRouter] )
+//기존코드
 app.use(express.static("public"));
-// app.use(cors({ credentials: true }));
-// app.use(authMiddleWare)
+
 
 // 각종 미들웨어(동선님 코드)
 app.use(cors());
@@ -60,10 +42,8 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 app.use(requestMiddleware);
 app.use(express.urlencoded({ extended: false }));
-
-const httpServer = http.createServer(app);
+//const httpServer = http.createServer(app);
 //const io = SocketIO(httpServer, { cors: { origin: "*" } });
-
 
 
 //서버 열기
@@ -71,8 +51,9 @@ let server = app.listen(port, () => {
     console.log(port, "포트로 서버가 켜졌어요!");
   });
   
-//   //Upgrades the server to accept websockets.
-  
+
+  //Upgrades the server to accept websockets.
+  //기존코드
   let io = socket(server, {
     cors : {
         origin:"*", //여기에 명시된 서버만 호스트만 내서버로 연결을 허용할거야
@@ -91,8 +72,7 @@ let server = app.listen(port, () => {
     // 'login' 이벤트를 받았을 때의 처리
     socket.on('login', function(login) {
         console.log('login 이벤트를 받았습니다.');
-        console.log(login)
-        console.dir(login);
+
 
         // 기존 클라이언트 ID가 없으면 클라이언트 ID를 맵에 추가
         console.log('접속한 소켓의 ID : ' + socket.id);
@@ -101,8 +81,7 @@ let server = app.listen(port, () => {
 
         console.log('접속한 클라이언트 ID 갯수 : %d', Object.keys(login_ids).length);
 
-
-        // 응답 메시지 전송
+        // 응답 메시지 전송-오류나서 주석처리 함
         //sendResponse(socket, 'login', '200', '로그인되었습니다.');
     });
   
@@ -152,21 +131,6 @@ let server = app.listen(port, () => {
     socket.on("answer", function (answer, roomName) {
       socket.broadcast.to(roomName).emit("answer", answer); //Sends Answer to the other peer in the room.
     });
-
-    let rooms = [];
-
-    // 방참여 요청
-    socket.on('req_join_room', async (msg) => {
-      let roomName = 'Room_' + msg.roomName;
-      if(!rooms.includes(roomName)) {
-        rooms.push(roomName);
-      }else{        
-        // does nothing
-      }
-      socket.join(roomName);
-      io.to(roomName).emit('noti_join_room', "방에 입장하였습니다.");
-    });
-
 
   });
 
